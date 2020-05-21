@@ -1,0 +1,19 @@
+ http://localhost:8082/oauth/token
+'grant_type', 'password');
+'username', usuario.username);
+'password', usuario.password);
+ 
+ ####
+ HEROKU
+ CREAR ADDON POSTGRESQL 
+heroku addons:create heroku-postgresql:hobby-dev --version=9.5
+heroku config:get POSTGRESQL_URI
+ HACER DEPLOY CON JAR
+heroku plugins:install java
+heroku buildpacks:clear
+heroku jar:deploy .\target\pruebaTecnica-api-rest-Hightech-0.0.1.jar
+heroku logs --tail  ver logs
+####
+GENERAR JAR
+ .\mvnw.cmd clean package
+ 
