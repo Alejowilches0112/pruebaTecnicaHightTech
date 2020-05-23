@@ -3,11 +3,15 @@ package com.prueba.Hightech.Controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,9 +63,16 @@ public class ClienteRestController {
 	}
 	
 	@PostMapping("/clientes")
-	public ResponseEntity<?> save(@RequestBody Cliente cliente){
+	public ResponseEntity<?> save(@Valid @RequestBody Cliente cliente, BindingResult result){
 		Map<String, Object> response = new HashMap<>();
 		try {
+			if (result.hasErrors()) {
+				List<String> errors = result.getFieldErrors().stream()
+						.map(err -> err.getField().toString().concat(" ").concat(err.getDefaultMessage()))
+						.collect(Collectors.toList());
+				response.put("errores", errors);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+			}
 			cliente = clienteService.save(cliente);
 			response.put("cliente", cliente);
 		} catch (DataAccessException e) {
@@ -72,9 +83,16 @@ public class ClienteRestController {
 	}
 
 	@PutMapping("/clientes/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cliente cliente){
+	public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Cliente cliente, BindingResult result){
 		Map<String, Object> response = new HashMap<>();
 		try {
+			if (result.hasErrors()) {
+				List<String> errors = result.getFieldErrors().stream()
+						.map(err -> err.getField().toString().concat(" ").concat(err.getDefaultMessage()))
+						.collect(Collectors.toList());
+				response.put("errores", errors);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+			}
 			Cliente clienteAct = clienteService.findById(id);
 			System.err.println(clienteAct.getNombre1()+" : " +cliente.getNombre1());
 			clienteAct.setNombre1(cliente.getNombre1());

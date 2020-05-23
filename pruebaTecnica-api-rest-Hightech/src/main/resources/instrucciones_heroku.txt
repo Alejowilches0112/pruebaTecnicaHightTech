@@ -7,7 +7,7 @@
  HEROKU
  CREAR ADDON POSTGRESQL 
 heroku addons:create heroku-postgresql:hobby-dev --version=9.5
-heroku config:get POSTGRESQL_URI
+heroku config:get HEROKU_POSTGRESQL_PUCE_URL
  HACER DEPLOY CON JAR
 heroku plugins:install java
 heroku buildpacks:clear
